@@ -1,0 +1,724 @@
+<title>NYC Guide Study Deck</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* Layout: wayfinding-sign look. A big condensed title, six colored route bullets as topic filters, then one sign-style card or question panel at a time. */
+:root{
+  --bg:#EDEFF1; --surface:#FFFFFF; --ink:#12161B; --muted:#56606B; --line:#C9CFD6;
+  --btn-bg:#12161B; --btn-fg:#FFFFFF;
+  --good:#0B7A3B; --good-bg:#DDF3E4; --bad:#B3261E; --bad-bg:#FBE3E1;
+  --c-land:#D8281F; --c-span:#0039A6; --c-arch:#D9500E; --c-hist:#00813A; --c-cult:#A12D96; --c-burr:#8A5A2B;
+  --c-trans:#5B6770; --c-neig:#8A6A00; --c-lit:#00778A; --c-ppl:#5B4AB0; --on-neig:#FFFFFF; --c-stat:#66770F; --on-stat:#FFFFFF;
+  --f-display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --f-body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1317; --surface:#181D23; --ink:#EEF1F4; --muted:#9AA4AE; --line:#2C343C;
+    --btn-bg:#EEF1F4; --btn-fg:#0F1317;
+    --good:#4CC57A; --good-bg:#12301F; --bad:#FF8A80; --bad-bg:#3A1815;
+    --c-land:#E5483F; --c-span:#3F6FD8; --c-arch:#E8652A; --c-hist:#1FA255; --c-cult:#BE4DB3; --c-burr:#A9743F;
+    --c-trans:#6F7C88; --c-neig:#D9A520; --c-lit:#1A8FA1; --c-ppl:#7A66D6; --on-neig:#12161B; --c-stat:#A3B33A; --on-stat:#12161B;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1317; --surface:#181D23; --ink:#EEF1F4; --muted:#9AA4AE; --line:#2C343C;
+  --btn-bg:#EEF1F4; --btn-fg:#0F1317;
+  --good:#4CC57A; --good-bg:#12301F; --bad:#FF8A80; --bad-bg:#3A1815;
+  --c-land:#E5483F; --c-span:#3F6FD8; --c-arch:#E8652A; --c-hist:#1FA255; --c-cult:#BE4DB3; --c-burr:#A9743F;
+    --c-trans:#6F7C88; --c-neig:#D9A520; --c-lit:#1A8FA1; --c-ppl:#7A66D6; --on-neig:#12161B; --c-stat:#A3B33A; --on-stat:#12161B;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--ink); font-family:var(--f-body); font-size:16px; line-height:1.5;
+  padding-block:22px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:20px;min-width:0}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+
+#main{display:flex;flex-direction:column;gap:14px;min-width:0}
+.top{display:flex;flex-direction:column;gap:6px}
+.kicker{margin:0;font:500 12px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+h1{margin:0;font:700 clamp(54px,15vw,84px)/.9 var(--f-display);text-transform:uppercase;letter-spacing:.01em;text-wrap:balance}
+.sub{margin:4px 0 0;color:var(--muted);max-width:52ch}
+.prog{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin-top:10px}
+.prog i{display:block;height:100%;width:0;background:var(--c-hist);transition:width .3s}
+.progtxt{margin:0;font:500 12px var(--f-mono);letter-spacing:.06em;color:var(--muted);font-variant-numeric:tabular-nums}
+
+.tabs{display:grid;grid-template-columns:1fr 1fr;border:2px solid var(--ink);border-radius:6px;overflow:hidden}
+.tab{border:0;background:var(--surface);padding:12px;font:700 22px var(--f-display);text-transform:uppercase;letter-spacing:.08em;cursor:pointer;min-height:48px}
+.tab+.tab{border-left:2px solid var(--ink)}
+.tab[aria-pressed="true"]{background:var(--btn-bg);color:var(--btn-fg)}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:5px 12px 5px 6px;min-height:40px;border:2px solid var(--line);background:transparent;border-radius:999px;cursor:pointer;font-weight:700;font-size:15px}
+.chip.all{padding-left:14px}
+.chip[aria-pressed="true"]{border-color:var(--ink);background:var(--surface)}
+.cnt{font:500 12px var(--f-mono);color:var(--muted)}
+
+.bullet{--col:var(--ink);flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--col);color:var(--on,#fff);font:700 17px/1 var(--f-display)}
+[data-c=land]{--col:var(--c-land)} [data-c=span]{--col:var(--c-span)} [data-c=arch]{--col:var(--c-arch)}
+[data-c=hist]{--col:var(--c-hist)} [data-c=cult]{--col:var(--c-cult)} [data-c=burr]{--col:var(--c-burr)}
+[data-c=trans]{--col:var(--c-trans)} [data-c=lit]{--col:var(--c-lit)} [data-c=ppl]{--col:var(--c-ppl)}
+[data-c=neig]{--col:var(--c-neig);--on:var(--on-neig)}
+[data-c=stat]{--col:var(--c-stat);--on:var(--on-stat)}
+
+.banner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border:2px dashed var(--ink);border-radius:6px;font-weight:700}
+
+/* flashcard */
+.scene{perspective:1400px}
+.card{display:block;width:100%;padding:0;border:0;background:none;text-align:left;cursor:pointer}
+.inner{display:grid;transition:transform .5s;transform-style:preserve-3d}
+.inner.flipped{transform:rotateY(180deg)}
+.face{grid-area:1/1;display:flex;flex-direction:column;min-height:320px;background:var(--surface);border:2px solid var(--ink);border-radius:6px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.face.back{transform:rotateY(180deg)}
+.band{display:flex;align-items:center;gap:10px;padding:9px 14px;background:var(--col);color:var(--on,#fff);font:700 19px var(--f-display);text-transform:uppercase;letter-spacing:.07em}
+.band .bullet{background:var(--on,#fff);color:var(--col);width:26px;height:26px;font-size:16px}
+.fbody{flex:1;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:20px 18px}
+.q{font-size:clamp(20px,5vw,25px);line-height:1.3;font-weight:700;text-wrap:balance}
+.ans{font:700 clamp(32px,9vw,44px)/1.02 var(--f-display);text-wrap:balance}
+.note{color:var(--muted);margin:0}
+.hint{padding:0 18px 14px;font:500 12px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+.meta{display:flex;justify-content:space-between;align-items:center;gap:10px;font:500 13px var(--f-mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.tag-known{color:var(--good);font-weight:500}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{min-height:48px;padding:10px 16px;border:2px solid var(--ink);border-radius:6px;background:var(--surface);cursor:pointer;font-weight:700}
+.btn.primary{background:var(--btn-bg);color:var(--btn-fg)}
+.btn.small{min-height:40px;padding:6px 12px;font-size:14px}
+.btn[aria-pressed="true"]{background:var(--btn-bg);color:var(--btn-fg)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.empty{padding:28px 18px;border:2px dashed var(--line);border-radius:6px;display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+.empty p{margin:0}
+
+/* quiz */
+.panel{background:var(--surface);border:2px solid var(--ink);border-radius:6px;overflow:hidden}
+.pbody{padding:18px;display:flex;flex-direction:column;gap:16px}
+.panel h2{margin:0;font:700 34px/1 var(--f-display);text-transform:uppercase;letter-spacing:.02em}
+.panel p{margin:0}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.panel{scroll-margin-top:12px}
+.btn{scroll-margin-bottom:16px}
+.quizzing .sub,.quizzing .prog,.quizzing .progtxt,.quizzing .chips{display:none}
+.qbar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.qbar i{display:block;height:100%;background:var(--ink)}
+.opts{display:grid;gap:10px}
+.setlab{margin:0;font:500 12px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.hintline{color:var(--muted);font-size:14px}
+.opt{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;padding:12px 14px;min-height:52px;border:2px solid var(--line);border-radius:6px;background:var(--surface);cursor:pointer;font-weight:700}
+.opt:hover:not(:disabled){border-color:var(--ink)}
+.opt .k{flex:none;font:500 13px var(--f-mono);padding-top:3px;color:var(--muted)}
+.opt:disabled{cursor:default;color:inherit}
+.opt.correct{border-color:var(--good);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.opt.dim{opacity:.55}
+.fb{padding:12px 14px;border-radius:6px;display:flex;flex-direction:column;gap:4px}
+.fb.ok{background:var(--good-bg);color:var(--good)}
+.fb.no{background:var(--bad-bg);color:var(--bad)}
+.fb strong{font-size:17px}
+.fb span{color:var(--ink)}
+.score{font:700 clamp(64px,20vw,104px)/.9 var(--f-display);font-variant-numeric:tabular-nums}
+.score small{font-size:.4em;color:var(--muted)}
+.breakdown{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.breakdown li{display:flex;align-items:center;gap:10px}
+.breakdown .nm{flex:1;min-width:0}
+.breakdown .sc{font:500 14px var(--f-mono);font-variant-numeric:tabular-nums}
+.missed{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.missed li{padding:10px 12px;border:2px solid var(--line);border-radius:6px;display:flex;flex-direction:column;gap:2px}
+.missed .ca{font-weight:700}
+h3{margin:0;font:700 22px var(--f-display);text-transform:uppercase;letter-spacing:.06em}
+
+footer{margin-top:6px;padding-top:16px;border-top:2px solid var(--line);color:var(--muted);font-size:14px}
+footer p{margin:0 0 8px}
+footer a{color:var(--ink);font-weight:700}
+@media (prefers-reduced-motion:reduce){.inner,.prog i{transition:none}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="kicker">NYC Sightseeing Guide License</p>
+    <h1>Study Deck</h1>
+    <p class="sub" id="sub"></p>
+    <div class="prog" aria-hidden="true"><i id="progbar"></i></div>
+    <p class="progtxt" id="progtxt"></p>
+  </header>
+  <nav class="tabs" id="tabs" aria-label="Study mode"></nav>
+  <div class="chips" id="chips" role="group" aria-label="Topic"></div>
+  <main id="main"></main>
+  <footer>
+    <p>These cards are original practice material, not questions from the exam. Per the DCWP study reference, the exam has 150 questions in multiple choice and true/false form, and 97 correct answers pass.</p>
+    <p>Check names, dates and figures against the <a href="https://www.nyc.gov/assets/dca/downloads/pdf/businesses/Sightseeing-Guide-Study-Reference.pdf">DCWP Sightseeing Guide Study Reference</a>. The exam also covers tour bus routing and group operations, which this deck does not.</p>
+  </footer>
+</div>
+<script>
+const CARDS = [];
+CARDS.push(
+/* ---- Landmarks ---- */
+{c:"land",q:"Who sculpted the Statue of Liberty?",a:"Frédéric Auguste Bartholdi",d:["Gustave Eiffel","Augustus Saint-Gaudens","Daniel Chester French"],n:"Gustave Eiffel engineered the iron framework inside. The statue was dedicated in 1886 on Liberty Island, once called Bedloe's Island."},
+{c:"land",q:"Which firm designed the Empire State Building, which opened in 1931?",a:"Shreve, Lamb & Harmon",d:["Warren & Wetmore","Carrère and Hastings","Skidmore, Owings & Merrill"],n:"It held the title of world's tallest building for roughly forty years."},
+{c:"land",q:"Who designed the Chrysler Building?",a:"William Van Alen",d:["Raymond Hood","Cass Gilbert","Daniel Burnham"],n:"Completed in 1930 in the Art Deco style. Look for the stainless-steel crown and the eagle ornaments near the top."},
+{c:"land",q:"Which skyscraper was nicknamed the 'Cathedral of Commerce'?",a:"Woolworth Building",d:["Chrysler Building","Singer Building","Equitable Building"],n:"Cass Gilbert designed it for F. W. Woolworth. It opened in 1913 on Broadway and was then the world's tallest building."},
+{c:"land",q:"Which architect designed the Flatiron Building (1902)?",a:"Daniel Burnham",d:["Louis Sullivan","Stanford White","Richard Morris Hunt"],n:"The wedge shape fits the triangle where Fifth Avenue, Broadway and 23rd Street meet. Its original name was the Fuller Building."},
+{c:"land",q:"Why is One World Trade Center exactly 1,776 feet tall?",a:"It recalls the year of the Declaration of Independence",d:["It matches the height of the original Twin Towers","It marks the year the Constitution was signed","It honors the year New York became a state"],n:"The tower opened in 2014 beside the National September 11 Memorial."},
+{c:"land",q:"Before it was renamed in 1904, Times Square was known as what?",a:"Longacre Square",d:["Herald Square","Greeley Square","Duffy Square"],n:"It took its new name when The New York Times moved into One Times Square."},
+{c:"land",q:"Ellis Island operated as an immigration station from 1892 until which year?",a:"1954",d:["1924","1965","1939"],n:"Annie Moore of Ireland is recorded as the first immigrant processed there. Today the island holds a national museum of immigration."},
+{c:"land",q:"Carnegie Hall opened in 1891. Which Russian composer conducted during opening week?",a:"Pyotr Ilyich Tchaikovsky",d:["Sergei Rachmaninoff","Igor Stravinsky","Dmitri Shostakovich"],n:"The hall stands at West 57th Street and Seventh Avenue."},
+{c:"land",q:"Rockefeller Center was built mainly during which period?",a:"The Great Depression, in the 1930s",d:["The Gilded Age, in the 1880s","World War II, in the 1940s","The mid-1920s boom"],n:"John D. Rockefeller Jr. backed the project. 30 Rockefeller Plaza is its Art Deco centerpiece and the home of NBC."},
+
+/* ---- Bridges & Water ---- */
+{c:"span",q:"Who designed the Brooklyn Bridge, which opened in 1883?",a:"John A. Roebling",d:["Othmar Ammann","Gustav Lindenthal","Leon Moisseiff"],n:"Roebling died in 1869 after an accident during early surveying. His son Washington Roebling, assisted by his wife Emily Warren Roebling, finished the job."},
+{c:"span",q:"The Brooklyn Bridge's stone towers have what shape of openings?",a:"Pointed Gothic arches",d:["Round Romanesque arches","Flat Greek lintels","Horseshoe arches"],n:"The towers are granite and limestone. When it opened, it was the longest suspension bridge in the world."},
+{c:"span",q:"Which bridge connects Brooklyn and Staten Island?",a:"Verrazzano-Narrows Bridge",d:["Goethals Bridge","Bayonne Bridge","Outerbridge Crossing"],n:"It opened in 1964 and was designed by Othmar Ammann. It is named for Giovanni da Verrazzano, who entered the harbor in 1524."},
+{c:"span",q:"The George Washington Bridge links Washington Heights to which New Jersey town?",a:"Fort Lee",d:["Hoboken","Weehawken","Englewood"],n:"It crosses the Hudson River, opened in 1931 and was also designed by Othmar Ammann."},
+{c:"span",q:"Which bridge is also known as the 59th Street Bridge?",a:"Queensboro Bridge",d:["Williamsburg Bridge","Manhattan Bridge","Triborough Bridge"],n:"It is a cantilever bridge that opened in 1909 and passes over Roosevelt Island."},
+{c:"span",q:"Which was the first vehicular tunnel under the Hudson River, opened in 1927?",a:"Holland Tunnel",d:["Lincoln Tunnel","Brooklyn-Battery Tunnel","Queens-Midtown Tunnel"],n:"It is named for chief engineer Clifford Holland, who died before it was finished. It connects Lower Manhattan and Jersey City."},
+{c:"span",q:"The Staten Island Ferry runs between St. George and which Manhattan terminal?",a:"Whitehall Terminal",d:["Battery Maritime Building","Pier 83","Wall Street Pier"],n:"The ferry is free to ride and offers views of the Statue of Liberty."},
+{c:"span",q:"The Hudson River is named for the explorer who sailed it in 1609. Who was he?",a:"Henry Hudson",d:["Giovanni da Verrazzano","Peter Minuit","Adriaen Block"],n:"He was sailing for the Dutch East India Company aboard the Halve Maen."},
+{c:"span",q:"What is the East River, geographically?",a:"A tidal strait",d:["A freshwater river","A man-made canal","A glacial lake"],n:"It connects Upper New York Bay with Long Island Sound and separates Manhattan from Brooklyn and Queens."},
+{c:"span",q:"How does a visitor travel by air to Roosevelt Island from Manhattan?",a:"The Roosevelt Island Tramway",d:["A cable-stayed pedestrian bridge","A monorail","A funicular"],n:"The tram opened in 1976 and rises above the East River."},
+
+/* ---- Architecture ---- */
+{c:"arch",q:"The Chrysler Building is a landmark example of which style?",a:"Art Deco",d:["Beaux-Arts","International Style","Gothic Revival"],n:"Look for geometric ornament, a strong vertical emphasis and metallic decoration."},
+{c:"arch",q:"Grand Central Terminal (1913) is best described in which style?",a:"Beaux-Arts",d:["Art Deco","Romanesque Revival","Federal"],n:"Warren & Wetmore and Reed & Stem were the architects. Beaux-Arts means grand symmetry, classical detail and sculpture."},
+{c:"arch",q:"Who designed St. Patrick's Cathedral on Fifth Avenue?",a:"James Renwick Jr.",d:["Richard Upjohn","Cass Gilbert","Ralph Adams Cram"],n:"It is Gothic Revival and was dedicated in 1879."},
+{c:"arch",q:"Which Gothic Revival church from 1846 sits at the head of Wall Street?",a:"Trinity Church",d:["St. Paul's Chapel","Grace Church","Riverside Church"],n:"Richard Upjohn designed it. Its spire kept it among the tallest structures in the city for decades."},
+{c:"arch",q:"The Seagram Building (1958) on Park Avenue is a landmark of which style?",a:"International Style",d:["Postmodernism","Art Deco","Neo-Gothic"],n:"Ludwig Mies van der Rohe designed it with Philip Johnson. The bronze and glass tower sits back from the street behind a plaza."},
+{c:"arch",q:"Which building is famous for its 'Chippendale' top?",a:"AT&T Building, now 550 Madison Avenue",d:["Seagram Building","Lever House","Hearst Tower"],n:"Philip Johnson and John Burgee designed this early Postmodern skyscraper, completed in 1984."},
+{c:"arch",q:"Which 1916 law produced the stepped 'wedding cake' skyscraper?",a:"The Zoning Resolution",d:["The Tenement House Act","The Commissioners' Plan","The Landmarks Law"],n:"It required upper floors to step back so light and air could reach the street. The Equitable Building of 1915 helped prompt it."},
+{c:"arch",q:"What does 'brownstone' actually refer to?",a:"A brown sandstone used to face row houses",d:["A type of brick made in Brooklyn","A cast-iron facade painted brown","A Dutch colonial roof tile"],n:"Brownstone rows fill neighborhoods such as Brooklyn Heights, Park Slope and Harlem."},
+{c:"arch",q:"SoHo is known for buildings made with which 19th-century material?",a:"Cast iron",d:["Terra cotta","Poured concrete","Limestone"],n:"The SoHo-Cast Iron Historic District has one of the largest collections of cast-iron facades anywhere. James Bogardus was an early champion of the method."},
+{c:"arch",q:"Who designed the Guggenheim Museum's spiral building?",a:"Frank Lloyd Wright",d:["I. M. Pei","Marcel Breuer","Eero Saarinen"],n:"It stands on Fifth Avenue at East 89th Street and opened in 1959, the year Wright died."}
+);
+CARDS.push(
+/* ---- History ---- */
+{c:"hist",q:"Which Native people lived in the New York area when Europeans arrived?",a:"The Lenape",d:["The Mohawk","The Seneca","The Pequot"],n:"Broadway follows an old Lenape trail up the length of Manhattan."},
+{c:"hist",q:"Which company settled New Amsterdam in the 1620s?",a:"The Dutch West India Company",d:["The Dutch East India Company","The Hudson's Bay Company","The Virginia Company"],n:"Henry Hudson's 1609 voyage was for the East India Company. The West India Company later founded the colony."},
+{c:"hist",q:"Who was the last Dutch director-general of New Amsterdam?",a:"Peter Stuyvesant",d:["Peter Minuit","Willem Kieft","Henry Hudson"],n:"He surrendered to the English in 1664, and the colony was renamed New York for the Duke of York."},
+{c:"hist",q:"At which building did George Washington take the presidential oath in 1789?",a:"Federal Hall, on Wall Street",d:["City Hall","Fraunces Tavern","St. Paul's Chapel"],n:"The current building replaced the one he used, and a statue of Washington marks the spot. New York was the capital until 1790."},
+{c:"hist",q:"What did the Commissioners' Plan of 1811 create?",a:"Manhattan's street grid",d:["The five-borough system","The subway network","Central Park"],n:"It laid out 12 numbered avenues and 155 cross streets north of Houston Street."},
+{c:"hist",q:"Which 1825 project made New York the nation's leading port?",a:"The Erie Canal",d:["The Croton Aqueduct","The Brooklyn Bridge","The Hudson River Railroad"],n:"The canal linked the Hudson River to Lake Erie and opened the Midwest to New York shipping."},
+{c:"hist",q:"Who designed Central Park's winning 'Greensward Plan' in 1858?",a:"Frederick Law Olmsted and Calvert Vaux",d:["Andrew Haswell Green and Robert Moses","Richard Morris Hunt and Cass Gilbert","Stanford White and Charles McKim"],n:"The park covers 843 acres."},
+{c:"hist",q:"In what year did the five boroughs consolidate into Greater New York?",a:"1898",d:["1883","1904","1865"],n:"Brooklyn, Queens, the Bronx and Staten Island joined Manhattan to form the modern city."},
+{c:"hist",q:"In what year did the first subway line open?",a:"1904",d:["1883","1913","1927"],n:"The IRT opened on October 27, 1904, running from City Hall north to 145th Street."},
+{c:"hist",q:"The 1911 Triangle Shirtwaist Factory fire led to reforms in which area?",a:"Workplace safety and labor laws",d:["Housing density limits","Public transit fares","Immigration processing"],n:"The fire killed 146 garment workers. The building near Washington Square now belongs to NYU."},
+
+/* ---- Museums & Worship ---- */
+{c:"cult",q:"Which museum houses the Temple of Dendur?",a:"The Metropolitan Museum of Art",d:["The Brooklyn Museum","The American Museum of Natural History","The Morgan Library"],n:"The Met sits on Fifth Avenue along Central Park and was founded in 1870."},
+{c:"cult",q:"Which museum owns Van Gogh's The Starry Night?",a:"Museum of Modern Art (MoMA)",d:["The Metropolitan Museum of Art","The Guggenheim","The Whitney Museum"],n:"MoMA is on West 53rd Street and was founded in 1929."},
+{c:"cult",q:"A giant blue whale model hangs in which museum?",a:"American Museum of Natural History",d:["Intrepid Museum","New-York Historical Society","Museum of the City of New York"],n:"It is on Central Park West at 79th Street."},
+{c:"cult",q:"Which museum is housed in Henry Clay Frick's former Fifth Avenue mansion?",a:"The Frick Collection",d:["The Neue Galerie","The Cooper Hewitt","The Morgan Library & Museum"],n:"The house stands at East 70th Street, facing Central Park."},
+{c:"cult",q:"The Cloisters, a museum of medieval art, is in which park?",a:"Fort Tryon Park",d:["Inwood Hill Park","Riverside Park","Morningside Park"],n:"It is a branch of the Met. John D. Rockefeller Jr. gave the park land to the city."},
+{c:"cult",q:"Which retired aircraft carrier is now a museum on Pier 86 on the Hudson?",a:"USS Intrepid",d:["USS Arizona","USS Missouri","USS Constitution"],n:"It is the centerpiece of the Intrepid Sea, Air & Space Museum."},
+{c:"cult",q:"Which Morningside Heights cathedral is nicknamed 'St. John the Unfinished'?",a:"Cathedral of St. John the Divine",d:["St. Patrick's Cathedral","Grace Cathedral","Cathedral of the Incarnation"],n:"It is Episcopal and was begun in 1892. Building has continued on and off for well over a century."},
+{c:"cult",q:"Which interdenominational church in Morningside Heights was funded by John D. Rockefeller Jr.?",a:"Riverside Church",d:["Trinity Church","Abyssinian Baptist Church","St. Thomas Church"],n:"It opened in 1930 and its tower is reputed to hold the largest carillon in the world."},
+{c:"cult",q:"Which is Manhattan's oldest surviving church building in continuous use?",a:"St. Paul's Chapel",d:["Trinity Church","St. Patrick's Old Cathedral","Grace Church"],n:"It was built in 1766 on Broadway. George Washington worshipped there after his 1789 inauguration."},
+{c:"cult",q:"Harlem's Abyssinian Baptist Church was long led by which father and son?",a:"Adam Clayton Powell Sr. and Jr.",d:["Marcus Garvey and Malcolm X","Howard Thurman and Benjamin Mays","Martin Luther King Sr. and Jr."],n:"Powell Jr. also served in Congress, representing Harlem."},
+
+/* ---- Boroughs & Parks ---- */
+{c:"burr",q:"Which borough is the largest by land area?",a:"Queens",d:["Brooklyn","Staten Island","The Bronx"],n:"Brooklyn has the largest population."},
+{c:"burr",q:"Which borough is the only one on the U.S. mainland?",a:"The Bronx",d:["Queens","Staten Island","Brooklyn"],n:"The others sit on islands: Manhattan, Staten Island and Long Island, where Brooklyn and Queens are."},
+{c:"burr",q:"Brooklyn has the same boundaries as which county?",a:"Kings County",d:["Richmond County","Queens County","New York County"],n:"Staten Island is Richmond County and Manhattan is New York County."},
+{c:"burr",q:"Who designed Prospect Park in Brooklyn?",a:"Frederick Law Olmsted and Calvert Vaux",d:["Robert Moses","Jacob Riis","Daniel Burnham"],n:"They also designed Central Park. Prospect Park opened in 1867."},
+{c:"burr",q:"The High Line park was built on top of what?",a:"An elevated freight rail line",d:["A former highway ramp","A decommissioned subway viaduct","A Hudson River pier"],n:"It runs along the West Side through the Meatpacking District to Hudson Yards. The first section opened in 2009."},
+{c:"burr",q:"Which marble arch stands at the foot of Fifth Avenue?",a:"Washington Square Arch",d:["Soldiers' and Sailors' Monument","Grant's Tomb","Bowling Green Fence"],n:"Stanford White designed it, and the marble version was completed in 1892."},
+{c:"burr",q:"The Unisphere stands in which park?",a:"Flushing Meadows-Corona Park",d:["Forest Park","Astoria Park","Alley Pond Park"],n:"It was built for the 1964 World's Fair in Queens."},
+{c:"burr",q:"Which Coney Island roller coaster opened in 1927 and is a city landmark?",a:"The Cyclone",d:["The Thunderbolt","The Scream Machine","The Comet"],n:"The Wonder Wheel, a Ferris wheel from 1920, is another Coney Island landmark."},
+{c:"burr",q:"On which street is the Apollo Theater?",a:"125th Street, in Harlem",d:["42nd Street, in Midtown","14th Street, near Union Square","Houston Street, in SoHo"],n:"Its Amateur Night has helped launch many careers."},
+{c:"burr",q:"Which is the oldest public park in New York City, dating to the Dutch era?",a:"Bowling Green",d:["Battery Park","Washington Square Park","City Hall Park"],n:"It sits at the foot of Broadway, near the Charging Bull."}
+);
+CARDS.push(
+/* ---- Landmarks (more) ---- */
+{c:"land",q:"The Statue of Liberty was a gift to the United States from the people of which country?",a:"France",d:["Great Britain","Spain","The Netherlands"],n:"It was dedicated in 1886. The pedestal was paid for largely by American donations, including a newspaper campaign led by Joseph Pulitzer."},
+{c:"land",q:"Which observation deck sits on top of 30 Rockefeller Plaza?",a:"Top of the Rock",d:["The Edge","SUMMIT One Vanderbilt","One World Observatory"],n:"The other three are real too. The Edge is at Hudson Yards, SUMMIT is beside Grand Central, and One World Observatory is at the World Trade Center."},
+{c:"land",q:"Which 1884 apartment building at Central Park West and 72nd Street was home to John Lennon?",a:"The Dakota",d:["The San Remo","The Ansonia","The Apthorp"],n:"Henry Hardenbergh designed it. The San Remo, the Ansonia and the Apthorp are also Upper West Side landmarks."},
+{c:"land",q:"What are the names of the two stone lions outside the New York Public Library's main building?",a:"Patience and Fortitude",d:["Courage and Wisdom","Strength and Honor","Justice and Prudence"],n:"Mayor Fiorello La Guardia is said to have named them for the qualities New Yorkers needed during the Depression. Carrère and Hastings designed the building, which opened in 1911."},
+{c:"land",q:"What does the ceiling of Grand Central's main concourse depict?",a:"The constellations of the zodiac",d:["A map of the New York Central rail lines","The Hudson River valley at dawn","Portraits of the railroad's founders"],n:"The star pattern famously appears reversed, as if seen from outside the sky."},
+{c:"land",q:"The New York Stock Exchange building stands at the corner of Wall Street and which other street?",a:"Broad Street",d:["Nassau Street","William Street","Water Street"],n:"The classical facade is at 11 Wall Street, across from Federal Hall."},
+
+/* ---- Bridges & Water (more) ---- */
+{c:"span",q:"Which is the oldest of the major East River bridges?",a:"Brooklyn Bridge",d:["Williamsburg Bridge","Manhattan Bridge","Queensboro Bridge"],n:"It opened in 1883. The Williamsburg Bridge followed in 1903, and the Manhattan and Queensboro bridges in 1909."},
+{c:"span",q:"The Robert F. Kennedy (Triborough) Bridge links Manhattan, Queens and which other borough?",a:"The Bronx",d:["Brooklyn","Staten Island","None, it links only two boroughs"],n:"It is really a set of bridges and a viaduct that meet on Randalls Island. It opened in 1936."},
+{c:"span",q:"Which bridge, opened in 1909, has a grand arch and colonnade at its Manhattan end?",a:"Manhattan Bridge",d:["Brooklyn Bridge","Williamsburg Bridge","Queensboro Bridge"],n:"Carrère and Hastings designed the arch and colonnade. The bridge crosses the East River between Chinatown and DUMBO."},
+{c:"span",q:"Which island in New York Harbor, once a military post, is now a public park reached by ferry?",a:"Governors Island",d:["Ellis Island","Roosevelt Island","Liberty Island"],n:"It has a former fort, Castle Williams, and open space with views of Lower Manhattan."},
+{c:"span",q:"Which tunnel, opened in 1950, connects Lower Manhattan to Brooklyn?",a:"Brooklyn-Battery Tunnel (Hugh L. Carey Tunnel)",d:["Holland Tunnel","Lincoln Tunnel","Queens-Midtown Tunnel"],n:"The Holland and Lincoln tunnels cross the Hudson to New Jersey. The Queens-Midtown Tunnel crosses the East River to Queens."},
+
+/* ---- Architecture (more) ---- */
+{c:"arch",q:"Federal Hall on Wall Street, built as a customs house in 1842, is an example of which style?",a:"Greek Revival",d:["Beaux-Arts","Gothic Revival","Art Deco"],n:"Look for the Doric columns across the front. A statue of George Washington stands on the steps."},
+{c:"arch",q:"Who designed the original Pennsylvania Station, which was demolished in the 1960s?",a:"McKim, Mead & White",d:["Warren & Wetmore","Carrère and Hastings","Shreve, Lamb & Harmon"],n:"Its loss helped lead to the Landmarks Law of 1965. The current Penn Station sits underground beneath Madison Square Garden."},
+{c:"arch",q:"In what year did New York City pass its Landmarks Law, creating the Landmarks Preservation Commission?",a:"1965",d:["1948","1973","1986"],n:"The demolition of the old Penn Station was a major spur."},
+{c:"arch",q:"Which 1952 Park Avenue building was an early glass curtain-wall skyscraper?",a:"Lever House",d:["Seagram Building","Chrysler Building","Woolworth Building"],n:"Skidmore, Owings & Merrill designed it. The Seagram Building across the street followed in 1958."},
+{c:"arch",q:"Who designed the Oculus, the winged transit hall at the World Trade Center?",a:"Santiago Calatrava",d:["Frank Gehry","Renzo Piano","Thomas Heatherwick"],n:"It opened in 2016. Renzo Piano designed the Whitney Museum and the New York Times Building, and Heatherwick designed the Vessel at Hudson Yards."},
+
+/* ---- History (more) ---- */
+{c:"hist",q:"According to tradition, who bought Manhattan from the Lenape in 1626?",a:"Peter Minuit",d:["Peter Stuyvesant","Willem Kieft","Henry Hudson"],n:"The famous price of about 24 dollars is a later estimate, and many historians question whether the Lenape saw it as a sale of land."},
+{c:"hist",q:"What sparked the New York City draft riots of July 1863?",a:"The Civil War military draft",d:["A transit fare increase","A bank failure","A tenement fire"],n:"The riots were among the deadliest civil disturbances in U.S. history. Black New Yorkers were among the main targets."},
+{c:"hist",q:"'Boss' William Tweed headed which political organization?",a:"Tammany Hall",d:["The Whig Party","The Know-Nothings","The Bull Moose Party"],n:"Tammany was a Democratic machine. Tweed was convicted of corruption in the 1870s, and the Tweed Courthouse near City Hall carries his name."},
+{c:"hist",q:"Who designed the original Twin Towers of the World Trade Center?",a:"Minoru Yamasaki",d:["I. M. Pei","Philip Johnson","Eero Saarinen"],n:"The towers were completed in the early 1970s. Their footprints are now the National September 11 Memorial."},
+{c:"hist",q:"Harlem takes its name from a city in which country?",a:"The Netherlands",d:["Germany","Belgium","England"],n:"The Dutch called it Nieuw Haarlem after Haarlem. Brooklyn comes from Breuckelen and Staten Island from Staten Eylandt."},
+{c:"hist",q:"Where were the 1939-40 and 1964-65 World's Fairs held?",a:"Flushing Meadows, Queens",d:["Randalls Island","Central Park","Coney Island"],n:"The Unisphere is a relic of the 1964 fair. The site is now Flushing Meadows-Corona Park."},
+{c:"hist",q:"Who was the first mayor of the consolidated City of New York in 1898?",a:"Robert A. Van Wyck",d:["Fiorello La Guardia","Seth Low","William L. Strong"],n:"Strong was the last mayor of the pre-consolidation city. Seth Low, a former mayor of Brooklyn, took office in 1902."},
+{c:"hist",q:"Which mayor, in office from 1934 to 1945, is the namesake of a major airport?",a:"Fiorello La Guardia",d:["Robert F. Wagner","William O'Dwyer","Ed Koch"],n:"LaGuardia Airport is in Queens. Idlewild Airport was renamed for President Kennedy and is now JFK."},
+
+/* ---- Museums & Worship (more) ---- */
+{c:"cult",q:"In 2015 the Whitney Museum of American Art moved to which neighborhood?",a:"The Meatpacking District",d:["SoHo","Tribeca","Harlem"],n:"Renzo Piano designed the building, which sits at the southern end of the High Line. The previous home was on Madison Avenue."},
+{c:"cult",q:"Which Midtown museum is built around J. P. Morgan's private library and holds Gutenberg Bibles?",a:"The Morgan Library & Museum",d:["The Frick Collection","The Grolier Club","The Cooper Hewitt"],n:"It is on Madison Avenue at 36th Street. McKim, Mead & White designed the original library."},
+{c:"cult",q:"Which museum, in Andrew Carnegie's former mansion, is the Smithsonian's design museum?",a:"Cooper Hewitt",d:["The Jewish Museum","The Museum of Arts and Design","The Neue Galerie"],n:"It stands on Fifth Avenue at 91st Street, along Museum Mile."},
+{c:"cult",q:"Which Brooklyn museum holds Judy Chicago's installation The Dinner Party?",a:"The Brooklyn Museum",d:["The Brooklyn Historical Society","The Museum of Contemporary African Diasporan Arts","BAM"],n:"It also has a major Egyptian collection. The museum is on Eastern Parkway near Prospect Park."},
+{c:"cult",q:"Who designed the National September 11 Memorial, titled Reflecting Absence?",a:"Michael Arad",d:["Daniel Libeskind","Maya Lin","Santiago Calatrava"],n:"Arad worked with landscape architect Peter Walker. Libeskind created the master plan for the site."},
+
+/* ---- Boroughs & Parks (more) ---- */
+{c:"burr",q:"Which park holds both the Bronx Zoo and the New York Botanical Garden?",a:"Bronx Park",d:["Van Cortlandt Park","Pelham Bay Park","Crotona Park"],n:"Both sit along the Bronx River."},
+{c:"burr",q:"Which is the largest park in New York City?",a:"Pelham Bay Park",d:["Central Park","Flushing Meadows-Corona Park","Prospect Park"],n:"Pelham Bay Park in the Bronx is more than three times the size of Central Park. It includes Orchard Beach."},
+{c:"burr",q:"Which Brooklyn institution is famous for its Cherry Esplanade and Japanese Hill-and-Pond Garden?",a:"Brooklyn Botanic Garden",d:["Prospect Park Zoo","Green-Wood Cemetery","Wave Hill"],n:"Its Celebrity Walk honors famous Brooklynites. Wave Hill is a public garden in the Bronx."},
+{c:"burr",q:"Bethesda Terrace and its Angel of the Waters fountain are in which park?",a:"Central Park",d:["Prospect Park","Riverside Park","Fort Tryon Park"],n:"Emma Stebbins sculpted the angel. The terrace overlooks the Lake."},
+{c:"burr",q:"Which park directly behind the New York Public Library's main building hosts a winter village and ice rink?",a:"Bryant Park",d:["Madison Square Park","Union Square Park","Washington Square Park"],n:"It lies between 40th and 42nd Streets, west of Fifth Avenue. The library's stacks run beneath the lawn."},
+{c:"burr",q:"Which Staten Island site began as a retirement home for sailors and is now a cultural center and botanical garden?",a:"Snug Harbor",d:["Historic Richmond Town","Fort Wadsworth","The Conference House"],n:"Sailors' Snug Harbor opened in 1833 on the island's North Shore."},
+{c:"burr",q:"Grant's Tomb stands in which park?",a:"Riverside Park",d:["Morningside Park","Fort Tryon Park","Central Park"],n:"It is the largest mausoleum in North America and overlooks the Hudson at 122nd Street."}
+);
+CARDS.push(
+/* ---- Getting There ---- */
+{c:"trans",q:"How much does it cost to ride the Staten Island Ferry?",a:"It is free",d:["$3.00 each way","$1.00 each way","$5.00 round trip"],n:"It runs around the clock between St. George, Staten Island, and Whitehall Terminal in Lower Manhattan, and passes close to the Statue of Liberty."},
+{c:"trans",q:"Which agency runs New York City's subways and local buses?",a:"The Metropolitan Transportation Authority (MTA)",d:["The Port Authority of New York and New Jersey","The Department of Transportation","The Taxi and Limousine Commission"],n:"The MTA also runs Metro-North Railroad and the Long Island Rail Road."},
+{c:"trans",q:"Which agency runs the Port Authority Bus Terminal, the PATH trains and the region's major airports?",a:"The Port Authority of New York and New Jersey",d:["The Metropolitan Transportation Authority","NJ Transit","The Department of Transportation"],n:"The bus terminal is on Eighth Avenue between 40th and 42nd Streets."},
+{c:"trans",q:"Which two major airports are in Queens?",a:"JFK and LaGuardia",d:["JFK and Newark","LaGuardia and Teterboro","Newark and LaGuardia"],n:"Newark Liberty is in New Jersey. The AirTrain links JFK with the subway and the Long Island Rail Road."},
+{c:"trans",q:"Which commuter railroad runs north from Grand Central Terminal?",a:"Metro-North Railroad",d:["Long Island Rail Road","NJ Transit","Amtrak"],n:"It serves the Hudson Valley and Connecticut. The Long Island Rail Road also reaches Grand Central, and Amtrak and NJ Transit use Penn Station."},
+{c:"trans",q:"Penn Station lies beneath which famous venue?",a:"Madison Square Garden",d:["Radio City Music Hall","Barclays Center","The Javits Center"],n:"It is the busiest passenger rail station in North America. Amtrak, NJ Transit and the Long Island Rail Road all serve it."},
+{c:"trans",q:"Which subway line serves the Second Avenue Subway, whose first phase opened in 2017?",a:"The Q",d:["The 7","The L","The 6"],n:"The Q was extended north to 96th Street. The 6 runs on the Lexington Avenue line."},
+{c:"trans",q:"The 7 train, nicknamed the International Express, connects Manhattan with which borough?",a:"Queens",d:["Brooklyn","The Bronx","Staten Island"],n:"It runs through Sunnyside, Jackson Heights and Flushing, passing near Citi Field."},
+{c:"trans",q:"What is OMNY?",a:"The MTA's tap-to-pay fare system",d:["A subway map app","A ferry ticket program","A taxi booking service"],n:"It lets riders tap a phone, card or wearable at a reader. It is replacing the MetroCard."},
+{c:"trans",q:"Which subway line runs entirely outside Manhattan?",a:"The G",d:["The L","The J","The 7"],n:"The G links Brooklyn and Queens. The L, J and 7 all enter Manhattan."},
+{c:"trans",q:"What is the name of the MTA program that commissions artwork for stations?",a:"MTA Arts & Design (Arts for Transit)",d:["Metro Murals Project","Transit Gallery Commission","Station Canvas Program"],n:"The program has placed mosaics, glass and sculpture in stations since 1985."},
+{c:"trans",q:"Which year-round ferry service links Wall Street, Brooklyn, Queens and the Rockaways?",a:"NYC Ferry",d:["Staten Island Ferry","Circle Line","Seastreak"],n:"It launched in 2017. Circle Line runs sightseeing cruises, and Seastreak runs commuter routes to New Jersey and the Jersey Shore."},
+
+/* ---- Neighborhoods ---- */
+{c:"neig",q:"Chinatown's best-known north-south street, lined with restaurants and shops, is which?",a:"Mott Street",d:["Orchard Street","Bleecker Street","Varick Street"],n:"Canal Street is the busy east-west street through the neighborhood."},
+{c:"neig",q:"Manhattan's Little Italy is centered on which street?",a:"Mulberry Street",d:["Orchard Street","Greene Street","Varick Street"],n:"The neighborhood has shrunk as Chinatown has grown. Its Feast of San Gennaro takes place every September."},
+{c:"neig",q:"What does the name SoHo stand for?",a:"South of Houston Street",d:["South of Hudson Street","South of Harlem","South of Hester Street"],n:"The neighborhood is known for cast-iron buildings. Houston is pronounced HOUSE-ton."},
+{c:"neig",q:"What does the name Tribeca stand for?",a:"Triangle Below Canal Street",d:["Triangle Beside Chambers Street","Trinity Row Below Chambers","Tenement Block Below Canal"],n:"It sits between Canal Street and Chambers Street, west of Broadway."},
+{c:"neig",q:"What does the name DUMBO stand for?",a:"Down Under the Manhattan Bridge Overpass",d:["Down Under the Brooklyn Bridge Overpass","District Under the Manhattan Bridge Overlook","Downtown Under Manhattan's Biggest Overpass"],n:"Brooklyn Bridge Park and the Jane's Carousel sit at the water's edge here."},
+{c:"neig",q:"Which neighborhood is home to the Stonewall Inn, site of the 1969 uprising?",a:"Greenwich Village",d:["Chelsea","The East Village","Hell's Kitchen"],n:"The inn is on Christopher Street and is part of Stonewall National Monument."},
+{c:"neig",q:"Seventh Avenue in the Garment District is also known by what name?",a:"Fashion Avenue",d:["Designer Row","Needle Alley","Textile Boulevard"],n:"Sidewalk plaques there form the Fashion Walk of Fame."},
+{c:"neig",q:"Where is the Meatpacking District?",a:"The far West Village, near the south end of the High Line",d:["The East Village, near Tompkins Square","The Lower East Side","Tribeca"],n:"Once full of slaughterhouses, it now has restaurants, shops and the Whitney Museum."},
+{c:"neig",q:"The Tenement Museum on Orchard Street tells the stories of whom?",a:"Immigrant families who lived on the Lower East Side",d:["Dutch colonial merchants","Gilded Age industrialists","Harlem Renaissance writers"],n:"The Lower East Side was a gateway for waves of Jewish, Italian, Irish, German and Chinese newcomers."},
+{c:"neig",q:"Astoria, Queens, has long been known for a large community from which country?",a:"Greece",d:["Poland","Korea","Ireland"],n:"Astoria is also home to the Museum of the Moving Image and Kaufman Astoria Studios."},
+{c:"neig",q:"Brighton Beach in Brooklyn is nicknamed Little Odessa. Its large community comes from where?",a:"Russia and Ukraine, the former Soviet Union",d:["Poland","Greece","Italy"],n:"The neighborhood sits on the Atlantic beside Coney Island and has an elevated subway line over its main street."},
+{c:"neig",q:"Which Bronx neighborhood is home to Arthur Avenue, often called the real Little Italy?",a:"Belmont",d:["Riverdale","Mott Haven","Throgs Neck"],n:"It is known for Italian bakeries, butchers and an indoor market."},
+{c:"neig",q:"Washington Heights in Upper Manhattan has long been home to a large community from which country?",a:"The Dominican Republic",d:["Puerto Rico","Cuba","Mexico"],n:"The neighborhood sits at the northern end of Manhattan, near the George Washington Bridge."},
+{c:"neig",q:"East Harlem is also known by what name?",a:"El Barrio (Spanish Harlem)",d:["Little Havana","Nuyorican Village","Loisaida"],n:"It has long been home to a large Puerto Rican community. Loisaida is the Puerto Rican nickname for the Lower East Side."},
+
+/* ---- Literature & Stage ---- */
+{c:"lit",q:"Which author wrote the 1949 essay Here Is New York and also wrote Charlotte's Web?",a:"E. B. White",d:["Washington Irving","O. Henry","Walt Whitman"],n:"His essay is a classic portrait of the city's mix of residents, commuters and dreamers."},
+{c:"lit",q:"Which writer, known for The Legend of Sleepy Hollow, helped popularize the nickname Gotham for New York?",a:"Washington Irving",d:["James Fenimore Cooper","Herman Melville","Edgar Allan Poe"],n:"Irving used the name in Salmagundi in 1807."},
+{c:"lit",q:"Which author's novel The Age of Innocence portrays Gilded Age high society in New York?",a:"Edith Wharton",d:["Henry James","F. Scott Fitzgerald","Willa Cather"],n:"Wharton was born in New York and the novel won the Pulitzer Prize in 1921."},
+{c:"lit",q:"Which poet, closely tied to the Harlem Renaissance, lived on East 127th Street?",a:"Langston Hughes",d:["Walt Whitman","Paul Laurence Dunbar","Countee Cullen"],n:"His house is a landmark, and the block is co-named Langston Hughes Place."},
+{c:"lit",q:"Paule Marshall's novel Brown Girl, Brownstones follows a family from which Caribbean island in Brooklyn?",a:"Barbados",d:["Jamaica","Haiti","Trinidad"],n:"It was published in 1959 and is set in the brownstones of central Brooklyn."},
+{c:"lit",q:"Jack Finney's novel Time and Again sends its hero back to which New York year?",a:"1882",d:["1776","1911","1929"],n:"The story centers on the Dakota apartment building, which was new in the 1880s."},
+{c:"lit",q:"Which poet wrote Crossing Brooklyn Ferry and Leaves of Grass?",a:"Walt Whitman",d:["Hart Crane","Emily Dickinson","Carl Sandburg"],n:"Whitman edited the Brooklyn Daily Eagle. Hart Crane wrote The Bridge, a poem about the Brooklyn Bridge."},
+{c:"lit",q:"Which writer's short story The Gift of the Magi is set in New York?",a:"O. Henry",d:["Mark Twain","Damon Runyon","Saul Bellow"],n:"O. Henry was the pen name of William Sydney Porter. Many of his stories are set among ordinary New Yorkers."},
+{c:"lit",q:"Which author's novel The Great Gatsby features a valley of ashes in Queens?",a:"F. Scott Fitzgerald",d:["Ernest Hemingway","John Dos Passos","Theodore Dreiser"],n:"The valley of ashes stands in for the dump near Flushing Meadows. Gatsby's mansion is on Long Island's North Shore."},
+{c:"lit",q:"The Metropolitan Opera performs at which complex?",a:"Lincoln Center",d:["Carnegie Hall","Radio City Music Hall","The Beacon Theatre"],n:"Lincoln Center is on the Upper West Side. It is also home to the New York Philharmonic and the New York City Ballet."},
+{c:"lit",q:"Which company performs The Nutcracker each winter at Lincoln Center's David H. Koch Theater?",a:"New York City Ballet",d:["American Ballet Theatre","Alvin Ailey American Dance Theater","Joffrey Ballet"],n:"George Balanchine founded the company, and his version of The Nutcracker is a holiday tradition."},
+{c:"lit",q:"A Broadway theater is defined by having at least how many seats?",a:"500",d:["250","750","1,000"],n:"Off-Broadway houses seat 100 to 499. Most Broadway theaters are in the Theater District around Times Square."},
+{c:"lit",q:"Which theater is home to the Rockettes?",a:"Radio City Music Hall",d:["The Apollo Theater","The New Amsterdam Theatre","The Beacon Theatre"],n:"It opened in 1932 in Rockefeller Center and is an Art Deco landmark."},
+{c:"lit",q:"Which Greenwich Village club, opened in 1935 on Seventh Avenue South, is a famous jazz venue?",a:"The Village Vanguard",d:["The Blue Note","Birdland","The Cotton Club"],n:"It is in a basement and is known for live recordings. The Cotton Club was in Harlem."},
+
+/* ---- Culture & Communities ---- */
+{c:"ppl",q:"Which poet wrote The New Colossus, the sonnet on a plaque in the Statue of Liberty's pedestal?",a:"Emma Lazarus",d:["Walt Whitman","Edna St. Vincent Millay","Sara Teasdale"],n:"It includes the lines about the tired, poor and huddled masses."},
+{c:"ppl",q:"Katz's Delicatessen on Houston Street is famous for which sandwich?",a:"Pastrami on rye",d:["Reuben","Cuban","Italian hero"],n:"It opened in 1888 on the Lower East Side."},
+{c:"ppl",q:"What is a bialy?",a:"A baked roll from Bialystok, Poland, tied to the Lower East Side",d:["A fried dumpling from Hungary","A pretzel from Germany","A flatbread from Greece"],n:"It has a depression in the middle instead of a hole, and is often filled with onions."},
+{c:"ppl",q:"Dim sum, small plates served with tea, comes from which Chinese cuisine?",a:"Cantonese",d:["Sichuan","Hunan","Shandong"],n:"Chinatown and Flushing both have many dim sum restaurants."},
+{c:"ppl",q:"In the mid-19th century, the Five Points neighborhood was home to which large immigrant group?",a:"The Irish",d:["The Swedes","The Greeks","The Russians"],n:"The area sat near today's Chinatown and the courthouses on Centre Street."},
+{c:"ppl",q:"Why is the Islamic Cultural Center of New York built at an angle to the street grid?",a:"So that it faces Mecca",d:["To match the angle of Broadway","To follow an old Dutch road","To avoid a subway tunnel"],n:"The mosque is on Third Avenue at 96th Street."},
+{c:"ppl",q:"Which Reform synagogue on Fifth Avenue at 65th Street is often cited as one of the world's largest?",a:"Temple Emanu-El",d:["Central Synagogue","Eldridge Street Synagogue","Congregation Shearith Israel"],n:"It was built in Moorish Revival and Romanesque styles. Central Synagogue is on Lexington Avenue."},
+{c:"ppl",q:"The Museum at Eldridge Street occupies a restored 1887 building of what type?",a:"A synagogue",d:["A Greek Orthodox church","A Gothic cathedral","A Quaker meeting house"],n:"It is on the Lower East Side and is one of the first large Eastern European Jewish synagogues in the country."},
+{c:"ppl",q:"Green-Wood Cemetery, founded in 1838, is in which borough?",a:"Brooklyn",d:["The Bronx","Queens","Staten Island"],n:"Woodlawn Cemetery, founded in 1863, is in the Bronx. Both are garden cemeteries."},
+{c:"ppl",q:"Where is the Alice in Wonderland sculpture, by Jose de Creeft?",a:"Central Park",d:["Bryant Park","Prospect Park","Washington Square Park"],n:"It is near the Conservatory Water, where children sail model boats."},
+{c:"ppl",q:"Which Rockefeller Center sculpture shows a Titan holding up the heavens?",a:"Atlas",d:["Prometheus","Hercules","Poseidon"],n:"Lee Lawrie made Atlas, which stands across from St. Patrick's Cathedral. Prometheus is in the lower plaza."},
+{c:"ppl",q:"Who sculpted the Charging Bull in Bowling Green?",a:"Arturo Di Modica",d:["Fernando Botero","Isamu Noguchi","Augustus Saint-Gaudens"],n:"He installed it in 1989 without permission, and the city later moved it to its present spot."},
+{c:"ppl",q:"What are the main ingredients in a classic New York egg cream?",a:"Milk, seltzer and chocolate syrup",d:["Eggs, heavy cream and chocolate","Milk, ginger ale and vanilla","Egg whites, soda water and cream"],n:"It has no egg and no cream. Fox's U-bet is the traditional syrup."}
+);
+CARDS.push(
+/* ---- Statues & Famous Homes (new topic) ---- */
+{c:"stat",q:"Which Civil War general is shown on the gilded monument at Grand Army Plaza, at Fifth Avenue and 59th Street?",a:"William Tecumseh Sherman",d:["Ulysses S. Grant","George McClellan","Philip Sheridan"],n:"Augustus Saint-Gaudens made it, and a winged figure of Victory leads the general's horse. The Plaza Hotel is nearby."},
+{c:"stat",q:"The Pulitzer Fountain at Grand Army Plaza is topped by a statue of which Roman goddess?",a:"Pomona",d:["Diana","Ceres","Minerva"],n:"Pomona was the goddess of fruit trees and abundance. Karl Bitter sculpted the figure, and the fountain was paid for by a bequest from Joseph Pulitzer."},
+{c:"stat",q:"Which playwright's statue stands on Central Park's Literary Walk?",a:"William Shakespeare",d:["Christopher Marlowe","Eugene O'Neill","Oscar Wilde"],n:"The Mall also has statues of Robert Burns and Sir Walter Scott. Shakespeare in the Park takes place nearby at the Delacorte Theater."},
+{c:"stat",q:"Whose statue, with a storybook and a duck, sits beside Central Park's Conservatory Water?",a:"Hans Christian Andersen",d:["Lewis Carroll","Aesop","Mother Goose"],n:"The Alice in Wonderland sculpture is nearby too. Storytelling events are held at the Andersen statue in summer."},
+{c:"stat",q:"Which sled dog, famous for the 1925 serum run to Nome, has a statue in Central Park?",a:"Balto",d:["Togo","Rin Tin Tin","Lassie"],n:"Frederick Roth sculpted the statue, which stands near East 67th Street. Children love to climb on it."},
+{c:"stat",q:"Which First Lady's statue stands at the entrance to Riverside Park at West 72nd Street?",a:"Eleanor Roosevelt",d:["Jacqueline Kennedy Onassis","Abigail Adams","Dolley Madison"],n:"Penelope Jencks sculpted it, and it was dedicated in 1996."},
+{c:"stat",q:"Who sculpted the statue of Admiral David Farragut in Madison Square Park?",a:"Augustus Saint-Gaudens",d:["Daniel Chester French","Frederick MacMonnies","Gutzon Borglum"],n:"Stanford White designed the base. The statue was unveiled in 1881."},
+{c:"stat",q:"Edgar Allan Poe lived in a small cottage, where he wrote Annabel Lee, in which borough?",a:"The Bronx",d:["Brooklyn","Manhattan","Staten Island"],n:"Poe Cottage stands beside Poe Park along the Grand Concourse in Kingsbridge."},
+{c:"stat",q:"Which jazz legend's house museum is in Corona, Queens?",a:"Louis Armstrong",d:["Duke Ellington","Miles Davis","Count Basie"],n:"Armstrong lived in the modest brick house on 107th Street from 1943 until his death in 1971."},
+{c:"stat",q:"Which 1765 mansion in Washington Heights is Manhattan's oldest surviving house?",a:"Morris-Jumel Mansion",d:["Dyckman Farmhouse","Hamilton Grange","Gracie Mansion"],n:"George Washington used it as his headquarters in 1776. The Dyckman Farmhouse, from 1784, is the oldest surviving farmhouse in Manhattan."},
+{c:"stat",q:"What is Gracie Mansion, built in 1799 in Carl Schurz Park?",a:"The official residence of the mayor",d:["The headquarters of the Parks Department","A museum of the Dutch colonial era","The Manhattan Borough President's office"],n:"The Federal-style house became the mayor's residence in the 1940s, starting with Fiorello La Guardia."},
+{c:"stat",q:"The sidewalk stars outside the Second Avenue Deli honor performers of which theater tradition?",a:"Yiddish theater",d:["Broadway musicals","Vaudeville","Opera"],n:"Second Avenue was once the heart of the Yiddish theater district, nicknamed the Yiddish Rialto."},
+
+/* ---- Getting There ---- */
+{c:"trans",q:"The FDR Drive runs along which river?",a:"The East River",d:["The Hudson River","The Harlem River","The Bronx River"],n:"The West Side Highway runs along the Hudson River on the other side of Manhattan."},
+{c:"trans",q:"In Manhattan, which avenue divides East and West street addresses?",a:"Fifth Avenue",d:["Broadway","Madison Avenue","Sixth Avenue"],n:"East 42nd Street and West 42nd Street meet at Fifth Avenue."},
+{c:"trans",q:"In Manhattan's street grid, about how many north-south blocks make a mile?",a:"20",d:["10","15","30"],n:"The east-west blocks between avenues are much longer than the north-south ones."},
+
+/* ---- Neighborhoods ---- */
+{c:"neig",q:"Koreatown in Manhattan is centered on which street?",a:"West 32nd Street",d:["West 42nd Street","West 14th Street","West 23rd Street"],n:"The block between Fifth Avenue and Broadway is called Korea Way and is lined with restaurants and karaoke bars."},
+{c:"neig",q:"Hell's Kitchen is also known by what more official name?",a:"Clinton",d:["Murray Hill","Turtle Bay","Kips Bay"],n:"It runs along the Hudson River on Manhattan's West Side, just west of the Theater District."},
+{c:"neig",q:"Which Brooklyn neighborhood became the city's first designated historic district in 1965?",a:"Brooklyn Heights",d:["Park Slope","Fort Greene","Cobble Hill"],n:"It is known for brownstones and the Promenade, which looks across to Lower Manhattan."},
+{c:"neig",q:"Jackson Heights, Queens, is known for large communities from which regions?",a:"South Asia and Latin America",d:["Scandinavia and the Baltics","West Africa and the Caribbean","Eastern Europe and Russia"],n:"The streets around 74th Street are known as Little India, and Roosevelt Avenue has many Latin American restaurants."},
+{c:"neig",q:"The United Nations headquarters is in which Manhattan neighborhood?",a:"Turtle Bay",d:["Murray Hill","Kips Bay","Gramercy"],n:"It sits along the East River between 42nd and 48th Streets."},
+
+/* ---- Literature & Stage ---- */
+{c:"lit",q:"The New York Philharmonic performs at which hall at Lincoln Center?",a:"David Geffen Hall",d:["Alice Tully Hall","Walter Reade Theater","Rose Theater"],n:"The orchestra was founded in 1842 and is often called the oldest symphony orchestra in the United States."},
+{c:"lit",q:"The nickname The Great White Way refers to which street?",a:"Broadway",d:["Fifth Avenue","Park Avenue","Seventh Avenue"],n:"It refers to the bright lights of the Theater District around Times Square."},
+{c:"lit",q:"Which dance company, founded in 1958, is best known for the work Revelations?",a:"Alvin Ailey American Dance Theater",d:["Martha Graham Dance Company","Paul Taylor Dance Company","Merce Cunningham Dance Company"],n:"Alvin Ailey premiered Revelations in 1960. The company is based in Midtown Manhattan."},
+{c:"lit",q:"Which theater company presents free Shakespeare in the Park at Central Park's Delacorte Theater?",a:"The Public Theater",d:["Lincoln Center Theater","The Roundabout Theatre Company","Manhattan Theatre Club"],n:"Joseph Papp founded the program. The Public Theater itself is on Lafayette Street."},
+{c:"lit",q:"Hip-hop is said to have been born at a 1973 party at 1520 Sedgwick Avenue in which borough?",a:"The Bronx",d:["Brooklyn","Manhattan","Queens"],n:"DJ Kool Herc threw the party. The building is now recognized as the birthplace of hip-hop."},
+
+/* ---- Culture & Communities ---- */
+{c:"ppl",q:"Which pizzeria on Spring Street, opened in 1905, is often called the first pizzeria in the United States?",a:"Lombardi's",d:["Joe's Pizza","Patsy's","Di Fara"],n:"It is on the edge of Little Italy and is known for coal-oven pizza."},
+{c:"ppl",q:"A knish is a baked or fried snack most associated with which cuisine?",a:"Eastern European Jewish",d:["Greek","Puerto Rican","Korean"],n:"Yonah Schimmel Knish Bakery on East Houston Street has sold them since 1910."},
+{c:"ppl",q:"Which Episcopal church on East 29th Street is nicknamed The Little Church Around the Corner?",a:"Church of the Transfiguration",d:["Grace Church","St. Bartholomew's Church","St. Thomas Church"],n:"It has long been tied to the theater community, and actors have held services there."},
+{c:"ppl",q:"Which Bronx cemetery is the resting place of Duke Ellington, Miles Davis and Herman Melville?",a:"Woodlawn Cemetery",d:["Green-Wood Cemetery","Trinity Church Cemetery","Calvary Cemetery"],n:"Green-Wood is in Brooklyn, Trinity Church Cemetery is in Upper Manhattan, and Calvary is in Queens."},
+{c:"ppl",q:"Before Ellis Island opened in 1892, which fort at the tip of Manhattan was the main immigrant landing depot?",a:"Castle Clinton, then called Castle Garden",d:["Fort Wadsworth","Castle Williams","Fort Jay"],n:"It processed millions of arrivals from 1855 to 1890. Today it is a national monument in Battery Park."},
+{c:"ppl",q:"Each Labor Day, the West Indian American Day Carnival parade marches along which major Brooklyn road?",a:"Eastern Parkway",d:["Ocean Parkway","Atlantic Avenue","Flatbush Avenue"],n:"It is one of the largest parades in the city and celebrates Caribbean culture."},
+
+/* ---- Landmarks ---- */
+{c:"land",q:"How many floors does the Empire State Building have?",a:"102",d:["86","110","100"],n:"The main observation deck is on the 86th floor, and a smaller one is on the 102nd."},
+{c:"land",q:"The New Year's Eve ball drops from the top of which building?",a:"One Times Square",d:["The Paramount Building","The Marriott Marquis","One Astor Plaza"],n:"The first ball drop was in 1907."},
+{c:"land",q:"Which hotel at Grand Army Plaza is the home of the fictional child Eloise?",a:"The Plaza",d:["The Waldorf Astoria","The St. Regis","The Pierre"],n:"A portrait of Eloise hangs in the hotel. The Plaza stands at Fifth Avenue and Central Park South."},
+
+/* ---- Bridges & Water ---- */
+{c:"span",q:"Which bridge links Staten Island with Bayonne, New Jersey?",a:"Bayonne Bridge",d:["Goethals Bridge","Outerbridge Crossing","Verrazzano-Narrows Bridge"],n:"The Goethals Bridge goes to Elizabeth and the Outerbridge Crossing to Perth Amboy."},
+{c:"span",q:"The Harlem River separates Manhattan from which borough?",a:"The Bronx",d:["Queens","Brooklyn","Staten Island"],n:"It links the Hudson River with the East River."},
+
+/* ---- Architecture ---- */
+{c:"arch",q:"The Woolworth Building's ornament recalls which style?",a:"Gothic",d:["Art Deco","Italianate","Federal"],n:"Cass Gilbert called it a Gothic skyscraper. Its lobby has mosaics and a vaulted ceiling."},
+{c:"arch",q:"Which roof style, named for a French architect, marks many buildings in the Second Empire style?",a:"Mansard roof",d:["Gambrel roof","Hip roof","Butterfly roof"],n:"The style is named for Francois Mansart. Second Empire buildings often have steep, slate-covered roofs with dormer windows."},
+{c:"arch",q:"Who designed the Hearst Tower, which rises from a 1928 base on Eighth Avenue?",a:"Norman Foster",d:["Renzo Piano","Cesar Pelli","Richard Rogers"],n:"The tower opened in 2006. Its diagonal grid of steel is called the diagrid."},
+
+/* ---- History ---- */
+{c:"hist",q:"In what year did the English take New Amsterdam and rename it New York?",a:"1664",d:["1626","1683","1776"],n:"The city was named for James, Duke of York, who later became King James II."},
+{c:"hist",q:"The Harlem Renaissance flourished mainly in which decade?",a:"The 1920s",d:["The 1890s","The 1940s","The 1960s"],n:"It brought together writers, musicians and artists such as Langston Hughes and Duke Ellington."},
+{c:"hist",q:"Wall Street is named for a defensive wall built under which Dutch director-general?",a:"Peter Stuyvesant",d:["Peter Minuit","Willem Kieft","Adriaen van der Donck"],n:"The wall was built in 1653 on the northern edge of New Amsterdam."},
+{c:"hist",q:"Which powerful planner built many of New York's parkways, bridges and parks from the 1920s to the 1960s?",a:"Robert Moses",d:["Frederick Law Olmsted","Andrew Haswell Green","Jane Jacobs"],n:"Jane Jacobs led opposition to some of his plans, including a highway across Lower Manhattan."},
+
+/* ---- Museums & Worship ---- */
+{c:"cult",q:"Which Harlem museum, founded in 1968, focuses on artists of African descent?",a:"The Studio Museum in Harlem",d:["The Schomburg Center","The Apollo Theater","The Museum of the City of New York"],n:"It is on West 125th Street. The Schomburg Center is a research library for Black culture."},
+{c:"cult",q:"Which institution, founded in 1804, is the oldest museum in New York City?",a:"The New-York Historical Society",d:["The Metropolitan Museum of Art","The Brooklyn Museum","The American Museum of Natural History"],n:"It is on Central Park West at 77th Street."},
+{c:"cult",q:"The Rose Center for Earth and Space, with the Hayden Planetarium, is part of which museum?",a:"American Museum of Natural History",d:["The Intrepid Museum","The Museum of the City of New York","The New York Hall of Science"],n:"Its glass cube holds a large sphere that serves as the planetarium."},
+{c:"cult",q:"Which Gothic Revival church on Broadway at 10th Street was designed by James Renwick Jr.?",a:"Grace Church",d:["Trinity Church","St. Thomas Church","St. Patrick's Old Cathedral"],n:"It opened in 1846, and Renwick later designed St. Patrick's Cathedral."},
+
+/* ---- Boroughs & Parks ---- */
+{c:"burr",q:"Rockaway Beach is in which borough?",a:"Queens",d:["Brooklyn","Staten Island","The Bronx"],n:"It sits on the Rockaway Peninsula and can be reached by subway or ferry."},
+{c:"burr",q:"Wave Hill, a public garden with views of the Hudson and the Palisades, is in which borough?",a:"The Bronx",d:["Staten Island","Queens","Brooklyn"],n:"It is in the Riverdale neighborhood."},
+{c:"burr",q:"About how large is Central Park?",a:"About 843 acres",d:["About 250 acres","About 1,200 acres","About 2,000 acres"],n:"It runs from 59th Street to 110th Street between Fifth Avenue and Central Park West."},
+{c:"burr",q:"Who designed Riverside Park along the Hudson on Manhattan's Upper West Side?",a:"Frederick Law Olmsted",d:["Calvert Vaux","Robert Moses","Jacob Wrey Mould"],n:"Robert Moses later added the Henry Hudson Parkway and made major changes to the park."}
+);
+(function () {
+  const CATS = [
+    { id: "land", name: "Landmarks", sym: "L" },
+    { id: "span", name: "Bridges & Water", sym: "B" },
+    { id: "arch", name: "Architecture", sym: "A" },
+    { id: "hist", name: "History", sym: "H" },
+    { id: "cult", name: "Museums & Worship", sym: "M" },
+    { id: "burr", name: "Boroughs & Parks", sym: "P" },
+    { id: "trans", name: "Getting There", sym: "T" },
+    { id: "neig", name: "Neighborhoods", sym: "N" },
+    { id: "lit", name: "Literature & Stage", sym: "S" },
+    { id: "ppl", name: "Culture & Communities", sym: "C" },
+    { id: "stat", name: "Statues & Famous Homes", sym: "R" }
+  ];
+  const CAT = Object.fromEntries(CATS.map(c => [c.id, c]));
+  const ALL = CARDS.map((c, i) => Object.assign({ id: i }, c));
+  const KEY = "nyc-guide-deck-known";
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  const bullet = id => '<span class="bullet" data-c="' + id + '" aria-hidden="true">' + CAT[id].sym + "</span>";
+
+  const S = {
+    mode: "cards", cat: "all", shuffle: false, hideKnown: false,
+    deck: [], i: 0, flipped: false, known: new Set(),
+    review: false, confirmReset: false,
+    qlen: 25, qskip: false,
+    quiz: null, focus: false, reveal: null
+  };
+
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) JSON.parse(raw).forEach(n => { if (ALL[n]) S.known.add(n); });
+  } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(Array.from(S.known))); } catch (e) {} }
+
+  function shuffle(a) {
+    a = a.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  const inCat = c => S.cat === "all" || c.c === S.cat;
+
+  function buildDeck() {
+    if (!S.review) {
+      let d = ALL.filter(inCat);
+      if (S.hideKnown) d = d.filter(c => !S.known.has(c.id));
+      if (S.shuffle) d = shuffle(d);
+      S.deck = d;
+    }
+    S.i = 0;
+    S.flipped = false;
+  }
+
+  /* ---------- header, tabs, chips ---------- */
+  function renderHead() {
+    const total = ALL.length, k = S.known.size;
+    $("#sub").textContent = total + " cards across " + CATS.length + " topics. Flip them, mark what you know, then test yourself with a multiple choice quiz.";
+    $("#progbar").style.width = (k / total * 100) + "%";
+    $("#progtxt").textContent = k + " OF " + total + " MARKED KNOWN";
+  }
+  function renderTabs() {
+    $("#tabs").innerHTML =
+      '<button class="tab" data-act="tab" data-v="cards" aria-pressed="' + (S.mode === "cards") + '">Flashcards</button>' +
+      '<button class="tab" data-act="tab" data-v="quiz" aria-pressed="' + (S.mode === "quiz") + '">Quiz</button>';
+  }
+  function renderChips() {
+    let h = '<button class="chip all" data-act="cat" data-v="all" aria-pressed="' + (S.cat === "all" && !S.review) + '">All topics <span class="cnt">' + ALL.length + "</span></button>";
+    CATS.forEach(c => {
+      const n = ALL.filter(x => x.c === c.id).length;
+      h += '<button class="chip" data-act="cat" data-v="' + c.id + '" aria-pressed="' + (S.cat === c.id && !S.review) + '">' + bullet(c.id) + c.name + ' <span class="cnt">' + n + "</span></button>";
+    });
+    $("#chips").innerHTML = h;
+  }
+
+  /* ---------- flashcards ---------- */
+  function renderCards(m) {
+    let banner = "";
+    if (S.review) {
+      banner = '<div class="banner"><span>Reviewing ' + S.deck.length + " missed card" + (S.deck.length === 1 ? "" : "s") + '</span><button class="btn small" data-act="exitreview">Back to full deck</button></div>';
+    }
+    if (!S.deck.length) {
+      m.innerHTML = banner + '<div class="empty"><p>' +
+        (S.hideKnown ? "Every card in this topic is marked known." : "No cards to show.") +
+        '</p><button class="btn" data-act="hide">Show known cards again</button></div>';
+      return;
+    }
+    const c = S.deck[S.i], n = S.deck.length, known = S.known.has(c.id);
+    const fl = S.flipped;
+    m.innerHTML = banner +
+      '<div class="scene"><button class="card" id="card" data-act="flip" aria-label="Flashcard. Press to flip between question and answer.">' +
+      '<span class="inner' + (fl ? " flipped" : "") + '">' +
+      '<span class="face front" data-c="' + c.c + '"' + (fl ? ' aria-hidden="true"' : "") + ">" +
+        '<span class="band">' + bullet(c.c) + esc(CAT[c.c].name) + "</span>" +
+        '<span class="fbody"><span class="q">' + esc(c.q) + "</span></span>" +
+        '<span class="hint">Tap to reveal</span></span>' +
+      '<span class="face back" data-c="' + c.c + '"' + (fl ? "" : ' aria-hidden="true"') + ">" +
+        '<span class="band">' + bullet(c.c) + "Answer</span>" +
+        '<span class="fbody"><span class="ans">' + esc(c.a) + '</span><span class="note">' + esc(c.n) + "</span></span>" +
+        '<span class="hint">Tap to go back</span></span>' +
+      "</span></button></div>" +
+      '<div class="meta"><span>CARD ' + (S.i + 1) + " OF " + n + '</span><span class="tag-known">' + (known ? "MARKED KNOWN" : "") + "</span></div>" +
+      '<div class="pair"><button class="btn" data-act="learn">Still learning</button><button class="btn primary" data-act="know">Got it</button></div>' +
+      '<div class="row">' +
+        '<button class="btn small" data-act="prev">Previous</button>' +
+        '<button class="btn small" data-act="next">Next</button>' +
+        (S.review ? "" : '<button class="btn small" data-act="shuffle" aria-pressed="' + S.shuffle + '">Shuffle</button>' +
+        '<button class="btn small" data-act="hide" aria-pressed="' + S.hideKnown + '">Hide known</button>') +
+        '<button class="btn small ghost" data-act="reset">' + (S.confirmReset ? "Tap again to clear progress" : "Reset progress") + "</button>" +
+      "</div>";
+  }
+
+  function flip() {
+    S.flipped = !S.flipped;
+    const inner = $(".inner");
+    if (!inner) return;
+    inner.classList.toggle("flipped", S.flipped);
+    inner.querySelector(".front").setAttribute("aria-hidden", S.flipped ? "true" : "false");
+    inner.querySelector(".back").setAttribute("aria-hidden", S.flipped ? "false" : "true");
+  }
+  function step(d) {
+    const n = S.deck.length;
+    if (!n) return;
+    S.i = (S.i + d + n) % n;
+    S.flipped = false;
+    S.focus = true;
+    render();
+  }
+
+  /* ---------- quiz ---------- */
+  function pool() {
+    let p = ALL.filter(inCat);
+    if (S.qskip) p = p.filter(c => !S.known.has(c.id));
+    return p;
+  }
+  function makeItem(c) {
+    const opts = shuffle([c.a].concat(c.d));
+    return { c: c, opts: opts, correct: opts.indexOf(c.a), pick: null };
+  }
+  const isRight = it => it.pick === it.correct;
+
+  function startQuiz() {
+    const p = shuffle(pool());
+    if (!p.length) return;
+    const n = S.qlen === 0 ? p.length : Math.min(S.qlen, p.length);
+    S.quiz = { items: p.slice(0, n).map(makeItem), i: 0, done: false };
+    S.reveal = "panel";
+    S.focus = true;
+    render();
+  }
+  function renderQuiz(m) {
+    const q = S.quiz;
+    if (!q) return renderQuizSetup(m);
+    if (q.done) return renderResults(m);
+    const it = q.items[q.i], c = it.c, n = q.items.length;
+    const answered = it.pick !== null;
+    const right = answered && isRight(it);
+    let opts = "";
+    it.opts.forEach((o, k) => {
+      let cls = "opt";
+      if (answered) {
+        if (k === it.correct) cls += " correct";
+        else if (k === it.pick) cls += " wrong";
+        else cls += " dim";
+      }
+      opts += '<button class="' + cls + '" data-act="pick" data-v="' + k + '"' + (answered ? " disabled" : "") + '><span class="k">' + (k + 1) + "</span><span>" + esc(o) + "</span></button>";
+    });
+    let fb = "";
+    if (answered) {
+      const msg = right ? "Correct." : "Not quite. The answer is " + c.a + ".";
+      fb = '<div class="fb ' + (right ? "ok" : "no") + '"><strong>' + esc(msg) + "</strong><span>" + esc(c.n) + "</span></div>" +
+        '<button class="btn primary" data-act="qnext" data-focus="1">' + (q.i === n - 1 ? "See results" : "Next question") + "</button>";
+    }
+    const done = q.items.filter(x => x.pick !== null && isRight(x)).length;
+    m.innerHTML = '<div class="panel" data-c="' + c.c + '"><div class="band">' + bullet(c.c) + esc(CAT[c.c].name) + "</div>" +
+      '<div class="pbody">' +
+      '<div class="meta"><span>QUESTION ' + (q.i + 1) + " OF " + n + "</span><span>" + done + " CORRECT</span></div>" +
+      '<div class="qbar" aria-hidden="true"><i style="width:' + (q.i / n * 100) + '%"></i></div>' +
+      '<div class="q">' + esc(c.q) + "</div>" +
+      '<div class="opts">' + opts + "</div>" + fb +
+      "</div></div>";
+  }
+  function seg(label, act, items, isOn) {
+    const b = items.map(x => '<button class="btn small" data-act="' + act + '" data-v="' + x.v + '" aria-pressed="' + isOn(x.v) + '">' + x.t + "</button>").join("");
+    return '<p class="setlab">' + label + '</p><div class="seg" role="group" aria-label="' + label + '">' + b + "</div>";
+  }
+  function renderQuizSetup(m) {
+    const p = pool(), total = p.length;
+    const lens = [10, 25, 50, 100, 150].filter(v => v < total).map(v => ({ v: String(v), t: v === 150 ? "150 (exam length)" : String(v) }));
+    lens.push({ v: "0", t: "All " + total });
+    const count = S.qlen === 0 ? total : Math.min(S.qlen, total);
+    const topic = S.cat === "all" ? "all topics" : CAT[S.cat].name;
+    const lenOn = v => (v === "0" ? (S.qlen === 0 || S.qlen >= total) : S.qlen === parseInt(v, 10) && S.qlen < total);
+    m.innerHTML = '<div class="panel"><div class="pbody"><h2>Practice quiz</h2>' +
+      "<p>Questions come from " + esc(topic) + ". Pick a topic above to narrow it down. The real exam has 150 questions.</p>" +
+      seg("Number of questions", "qlen", lens, lenOn) +
+      seg("Cards to include", "qskip", [{ v: "0", t: "All cards" }, { v: "1", t: "Skip cards marked known" }], v => (v === "1") === S.qskip) +
+      (total ? "" : '<p class="hintline">Every card here is marked known. Switch to all cards to start a quiz.</p>') +
+      '<button class="btn primary" data-act="qstart"' + (total ? "" : " disabled") + ">Start quiz, " + count + " questions</button></div></div>";
+  }
+  function renderResults(m) {
+    const q = S.quiz, n = q.items.length;
+    const got = q.items.filter(isRight).length;
+    const pct = Math.round(got / n * 100);
+    const missed = q.items.filter(it => !isRight(it));
+    const rows = CATS.map(c => {
+      const sub = q.items.filter(it => it.c.c === c.id);
+      if (!sub.length) return "";
+      return '<li>' + bullet(c.id) + '<span class="nm">' + esc(c.name) + '</span><span class="sc">' + sub.filter(isRight).length + " / " + sub.length + "</span></li>";
+    }).join("");
+    const list = missed.map(it => "<li><span>" + esc(it.c.q) + '</span><span class="ca">' + esc(it.c.a) + "</span></li>").join("");
+    m.innerHTML = '<div class="panel"><div class="pbody">' +
+      '<div class="meta"><span>QUIZ COMPLETE</span><span>' + pct + "%</span></div>" +
+      '<div class="score">' + got + "<small> / " + n + "</small></div>" +
+      '<ul class="breakdown">' + rows + "</ul>" +
+      (missed.length ? "<h3>Missed (" + missed.length + ")</h3><ul class=\"missed\">" + list + "</ul>" : "<p>No misses. Try another topic.</p>") +
+      '<div class="row">' +
+      (missed.length ? '<button class="btn primary" data-act="qreview">Study missed as flashcards</button>' : "") +
+      '<button class="btn" data-act="qstart">New quiz</button>' +
+      '<button class="btn ghost" data-act="qsetup">Change settings</button></div>' +
+      "</div></div>";
+  }
+
+  /* ---------- render + events ---------- */
+  function render() {
+    renderHead(); renderTabs(); renderChips();
+    const m = $("#main");
+    if (S.mode === "cards") renderCards(m); else renderQuiz(m);
+    document.querySelector(".wrap").classList.toggle("quizzing", S.mode === "quiz" && !!S.quiz && !S.quiz.done);
+    if (S.reveal) {
+      const r = S.reveal; S.reveal = null;
+      const el = r === "next" ? m.querySelector("[data-focus]") : m.querySelector(".panel");
+      if (el) {
+        const b = el.getBoundingClientRect();
+        if (r === "next") { if (b.bottom > window.innerHeight - 12) el.scrollIntoView({ block: "end" }); }
+        else if (b.top < 8) el.scrollIntoView({ block: "start" });
+      }
+    }
+    if (S.focus) {
+      S.focus = false;
+      const f = m.querySelector("[data-focus]") || (S.mode === "cards" ? $("#card") : null);
+      if (f) f.focus({ preventScroll: true });
+    }
+  }
+
+  document.addEventListener("click", function (e) {
+    const t = e.target.closest("[data-act]");
+    if (!t) return;
+    const act = t.dataset.act, v = t.dataset.v;
+    if (act !== "reset") S.confirmReset = false;
+    switch (act) {
+      case "tab": S.mode = v; if (v === "quiz") S.quiz = null; break;
+      case "cat": S.cat = v; S.review = false; S.quiz = null; buildDeck(); break;
+      case "flip": flip(); return;
+      case "know": S.known.add(S.deck[S.i].id); save(); step(1); return;
+      case "learn": S.known.delete(S.deck[S.i].id); save(); step(1); return;
+      case "next": step(1); return;
+      case "prev": step(-1); return;
+      case "shuffle": S.shuffle = !S.shuffle; buildDeck(); break;
+      case "hide": S.hideKnown = !S.hideKnown; if (S.review) S.review = false; buildDeck(); break;
+      case "reset":
+        if (S.confirmReset) { S.known.clear(); save(); S.confirmReset = false; buildDeck(); }
+        else S.confirmReset = true;
+        break;
+      case "exitreview": S.review = false; buildDeck(); break;
+      case "qlen": S.qlen = parseInt(v, 10); break;
+      case "qskip": S.qskip = v === "1"; break;
+      case "qsetup": S.quiz = null; break;
+      case "qstart": startQuiz(); return;
+      case "pick": S.quiz.items[S.quiz.i].pick = parseInt(v, 10); S.focus = true; S.reveal = "next"; break;
+      case "qnext":
+        if (S.quiz.i === S.quiz.items.length - 1) S.quiz.done = true; else S.quiz.i++;
+        S.reveal = "panel";
+        break;
+      case "qreview":
+        S.review = true; S.mode = "cards";
+        S.deck = S.quiz.items.filter(it => !isRight(it)).map(it => it.c);
+        S.i = 0; S.flipped = false;
+        break;
+    }
+    render();
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (S.mode === "cards") {
+      if (e.key === "ArrowRight") { step(1); e.preventDefault(); }
+      else if (e.key === "ArrowLeft") { step(-1); e.preventDefault(); }
+      else if (e.key === " " && e.target === document.body) { flip(); e.preventDefault(); }
+    } else if (S.quiz && !S.quiz.done) {
+      const it = S.quiz.items[S.quiz.i];
+      const k = "1234".indexOf(e.key);
+      if (it.pick === null && k > -1 && k < it.opts.length) { it.pick = k; S.focus = true; S.reveal = "next"; render(); }
+    }
+  });
+
+  buildDeck();
+  render();
+})();
+</script>
