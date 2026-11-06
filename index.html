@@ -1,3 +1,9 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light;padding-block:env(safe-area-inset-top,0px) env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
 <title>NYC Guide Study Deck</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -140,9 +146,12 @@ h3{margin:0;font:700 22px var(--f-display);text-transform:uppercase;letter-spaci
 footer{margin-top:6px;padding-top:16px;border-top:2px solid var(--line);color:var(--muted);font-size:14px}
 footer p{margin:0 0 8px}
 footer a{color:var(--ink);font-weight:700}
+@media (max-width:600px){.chips{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:4px 2px 10px}.chip{flex:none;white-space:nowrap}}
 @media (prefers-reduced-motion:reduce){.inner,.prog i{transition:none}}
 </style>
 
+</head>
+<body>
 <div class="wrap">
   <header class="top">
     <p class="kicker">NYC Sightseeing Guide License</p>
@@ -198,6 +207,7 @@ CARDS.push(
 {c:"arch",q:"SoHo is known for buildings made with which 19th-century material?",a:"Cast iron",d:["Terra cotta","Poured concrete","Limestone"],n:"The SoHo-Cast Iron Historic District has one of the largest collections of cast-iron facades anywhere. James Bogardus was an early champion of the method."},
 {c:"arch",q:"Who designed the Guggenheim Museum's spiral building?",a:"Frank Lloyd Wright",d:["I. M. Pei","Marcel Breuer","Eero Saarinen"],n:"It stands on Fifth Avenue at East 89th Street and opened in 1959, the year Wright died."}
 );
+
 CARDS.push(
 /* ---- History ---- */
 {c:"hist",q:"Which Native people lived in the New York area when Europeans arrived?",a:"The Lenape",d:["The Mohawk","The Seneca","The Pequot"],n:"Broadway follows an old Lenape trail up the length of Manhattan."},
@@ -235,6 +245,7 @@ CARDS.push(
 {c:"burr",q:"On which street is the Apollo Theater?",a:"125th Street, in Harlem",d:["42nd Street, in Midtown","14th Street, near Union Square","Houston Street, in SoHo"],n:"Its Amateur Night has helped launch many careers."},
 {c:"burr",q:"Which is the oldest public park in New York City, dating to the Dutch era?",a:"Bowling Green",d:["Battery Park","Washington Square Park","City Hall Park"],n:"It sits at the foot of Broadway, near the Charging Bull."}
 );
+
 CARDS.push(
 /* ---- Landmarks (more) ---- */
 {c:"land",q:"The Statue of Liberty was a gift to the United States from the people of which country?",a:"France",d:["Great Britain","Spain","The Netherlands"],n:"It was dedicated in 1886. The pedestal was paid for largely by American donations, including a newspaper campaign led by Joseph Pulitzer."},
@@ -284,6 +295,7 @@ CARDS.push(
 {c:"burr",q:"Which Staten Island site began as a retirement home for sailors and is now a cultural center and botanical garden?",a:"Snug Harbor",d:["Historic Richmond Town","Fort Wadsworth","The Conference House"],n:"Sailors' Snug Harbor opened in 1833 on the island's North Shore."},
 {c:"burr",q:"Grant's Tomb stands in which park?",a:"Riverside Park",d:["Morningside Park","Fort Tryon Park","Central Park"],n:"It is the largest mausoleum in North America and overlooks the Hudson at 122nd Street."}
 );
+
 CARDS.push(
 /* ---- Getting There ---- */
 {c:"trans",q:"How much does it cost to ride the Staten Island Ferry?",a:"It is free",d:["$3.00 each way","$1.00 each way","$5.00 round trip"],n:"It runs around the clock between St. George, Staten Island, and Whitehall Terminal in Lower Manhattan, and passes close to the Statue of Liberty."},
@@ -346,6 +358,7 @@ CARDS.push(
 {c:"ppl",q:"Who sculpted the Charging Bull in Bowling Green?",a:"Arturo Di Modica",d:["Fernando Botero","Isamu Noguchi","Augustus Saint-Gaudens"],n:"He installed it in 1989 without permission, and the city later moved it to its present spot."},
 {c:"ppl",q:"What are the main ingredients in a classic New York egg cream?",a:"Milk, seltzer and chocolate syrup",d:["Eggs, heavy cream and chocolate","Milk, ginger ale and vanilla","Egg whites, soda water and cream"],n:"It has no egg and no cream. Fox's U-bet is the traditional syrup."}
 );
+
 CARDS.push(
 /* ---- Statues & Famous Homes (new topic) ---- */
 {c:"stat",q:"Which Civil War general is shown on the gilded monument at Grand Army Plaza, at Fifth Avenue and 59th Street?",a:"William Tecumseh Sherman",d:["Ulysses S. Grant","George McClellan","Philip Sheridan"],n:"Augustus Saint-Gaudens made it, and a winged figure of Victory leads the general's horse. The Plaza Hotel is nearby."},
@@ -420,6 +433,7 @@ CARDS.push(
 {c:"burr",q:"About how large is Central Park?",a:"About 843 acres",d:["About 250 acres","About 1,200 acres","About 2,000 acres"],n:"It runs from 59th Street to 110th Street between Fifth Avenue and Central Park West."},
 {c:"burr",q:"Who designed Riverside Park along the Hudson on Manhattan's Upper West Side?",a:"Frederick Law Olmsted",d:["Calvert Vaux","Robert Moses","Jacob Wrey Mould"],n:"Robert Moses later added the Henry Hudson Parkway and made major changes to the park."}
 );
+
 (function () {
   const CATS = [
     { id: "land", name: "Landmarks", sym: "L" },
@@ -721,4 +735,7 @@ CARDS.push(
   buildDeck();
   render();
 })();
+
 </script>
+</body>
+</html>
